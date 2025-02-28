@@ -34,17 +34,18 @@ push: ## Push the Kubernetes manifests to Github Container Registry.
 	flux push artifact oci://$(REGISTRY):latest \
 	  --path=./ \
 	  --source=$(REPOSITORY) \
-      --revision="$$(git branch --show-current)@sha1:$$(git rev-parse HEAD)"
+	  --revision="$$(git branch --show-current)@sha1:$$(git rev-parse HEAD)"
 
 ##@ Flux
 
 bootstrap: ## Deploy Flux Operator on the Kubernetes cluster.
 	@test $${GITHUB_TOKEN?Environment variable not set}
+
 	helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
-      --namespace flux-system \
-      --create-namespace \
-      --set multitenancy.enabled=true \
-      --wait
+	  --namespace flux-system \
+	  -create-namespace \
+	  --set multitenancy.enabled=true \
+	  --wait
 
 	kubectl -n flux-system create secret docker-registry ghcr-auth \
 	  --docker-server=ghcr.io \
