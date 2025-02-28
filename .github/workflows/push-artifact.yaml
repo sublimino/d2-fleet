@@ -12,14 +12,14 @@ jobs:
       id-token: write # for signing
     steps:
       - uses: actions/checkout@v4
-      - uses: controlplaneio-fluxcd/distribution/actions/setup@push-action
+      - uses: controlplaneio-fluxcd/distribution/actions/setup@main
       - uses: sigstore/cosign-installer@v3
       - uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: controlplaneio-fluxcd/distribution/actions/push@main
+      - uses: controlplaneio-fluxcd/distribution/actions/push@push-action
         id: push
         with:
           repository: ghcr.io/${{ github.repository }}
