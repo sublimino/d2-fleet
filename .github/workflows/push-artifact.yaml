@@ -2,6 +2,9 @@ name: push-artifact
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - 'main'
 
 jobs:
   flux-push:
