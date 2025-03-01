@@ -18,6 +18,7 @@ spec:
   cluster:
     type: kubernetes
     multitenant: true
+    tenantDefaultServiceAccount: flux
     networkPolicy: true
     domain: "cluster.local"
   sync:
