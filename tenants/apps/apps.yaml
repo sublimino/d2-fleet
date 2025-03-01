@@ -9,8 +9,10 @@ spec:
   inputs:
     - tenant: "frontend"
       tag: "${ARTIFACT_TAG}"
+      environment: "${ENVIRONMENT}"
     - tenant: "backend"
       tag: "${ARTIFACT_TAG}"
+      environment: "${ENVIRONMENT}"
   resources:
     - apiVersion: v1
       kind: Namespace
@@ -75,7 +77,7 @@ spec:
         sourceRef:
           kind: OCIRepository
           name: apps
-        path: "./"
+        path: "./<< inputs.environment >>"
         prune: true
         postBuild:
           substituteFrom:
