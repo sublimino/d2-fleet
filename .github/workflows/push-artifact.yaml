@@ -14,21 +14,27 @@ jobs:
       packages: write # for pushing
       id-token: write # for signing
     steps:
-      - uses: actions/checkout@v4
-      - uses: controlplaneio-fluxcd/distribution/actions/setup@main
-      - uses: sigstore/cosign-installer@v3
-      - uses: docker/login-action@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install flux
+        uses: controlplaneio-fluxcd/distribution/actions/setup@main
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: controlplaneio-fluxcd/distribution/actions/push@push-action
+      - name: Push artifact
+        uses: controlplaneio-fluxcd/distribution/actions/push@main
         id: push
         with:
           repository: ghcr.io/${{ github.repository }}
           path: "./"
           diff-tag: latest
-      - if: steps.push.outputs.pushed == 'true'
+      - name: Sign artifact
+        if: steps.push.outputs.pushed == 'true'
         run: cosign sign --yes $DIGEST_URL
         env:
           DIGEST_URL: ${{ steps.push.outputs.digest-url }}
