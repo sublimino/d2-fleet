@@ -6,6 +6,13 @@ metadata:
   annotations:
     fluxcd.controlplane.io/reconcileEvery: "5m"
 spec:
+  dependsOn:
+    - apiVersion: fluxcd.controlplane.io/v1
+      kind: ResourceSet
+      name: infra
+      namespace: flux-system
+      ready: true
+      readyExpr: status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True')
   inputs:
     - tenant: "frontend"
       tag: "${ARTIFACT_TAG}"
