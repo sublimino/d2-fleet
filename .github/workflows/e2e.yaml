@@ -21,25 +21,14 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         make bootstrap
-    - name: Wait Resources
+    - name: Verify cluster reconciliation
       run: |
-        namespaces=(
-          flux-system
-          backend
-          frontend
-        )
-
-        for namespace in "${namespaces[@]}"; do
-          while ! kubectl get ns $namespace > /dev/null 2>&1; do
-            echo "Waiting for namespace $namespace to be created..."
-            sleep 30
-          done
-        done
-
         resources=(
-          ks/cert-manager/infra-configs
-          ks/backend/apps
-          ks/frontend/apps
+          ResourceSet/flux-system/infra
+          Kustomization/cert-manager/infra-configs
+          ResourceSet/flux-system/apps
+          Kustomization/backend/apps
+          Kustomization/frontend/apps
         )
 
         for resource in "${resources[@]}"; do
@@ -53,6 +42,7 @@ jobs:
       if: failure()
       run: |
         kubectl -n flux-system get all
+        kubectl -n flux-system logs deploy/flux-operator
         kubectl -n flux-system logs deploy/source-controller
         kubectl -n flux-system logs deploy/kustomize-controller
         kubectl -n flux-system logs deploy/helm-controller
