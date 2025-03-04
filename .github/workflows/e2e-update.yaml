@@ -2,6 +2,8 @@ name: e2e-update
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: 0 8 * * 1
 
 jobs:
   image-update:
@@ -25,6 +27,8 @@ jobs:
           ResourceSet/flux-system/image-update-automation
           Kustomization/apps/apps
           ImageUpdateAutomation/apps/apps
+          Kustomization/infra/infra
+          ImageUpdateAutomation/infra/infra
         )
 
         for resource in "${resources[@]}"; do
@@ -37,6 +41,7 @@ jobs:
     - name: Image automation status
       run: |
         flux -n apps get all
+        flux -n infra get all
     - name: Debug failure
       if: failure()
       run: |
