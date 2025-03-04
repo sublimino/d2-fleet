@@ -1,12 +1,10 @@
-name: e2e
+name: e2e-update
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ 'main' ]
 
 jobs:
-  e2e:
+  image-update:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -18,17 +16,15 @@ jobs:
       uses: helm/kind-action@main
     - name: Bootstrap Flux
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_UPDATE_TOKEN }}
       run: |
-        make bootstrap
-    - name: Verify cluster reconciliation
+        make bootstrap-update
+    - name: Run image automation
       run: |
         resources=(
-          ResourceSet/flux-system/infra
-          Kustomization/cert-manager/infra-configs
-          ResourceSet/flux-system/apps
-          Kustomization/backend/apps
-          Kustomization/frontend/apps
+          ResourceSet/flux-system/image-update-automation
+          Kustomization/apps/apps
+          ImageUpdateAutomation/apps/apps
         )
 
         for resource in "${resources[@]}"; do
@@ -38,6 +34,9 @@ jobs:
 
           kubectl -n $namespace wait $kind/$name --for=condition=ready --timeout=5m
         done
+    - name: Image automation status
+      run: |
+        flux -n apps get all
     - name: Debug failure
       if: failure()
       run: |
@@ -45,5 +44,6 @@ jobs:
         kubectl -n flux-system logs deploy/flux-operator
         kubectl -n flux-system logs deploy/source-controller
         kubectl -n flux-system logs deploy/kustomize-controller
-        kubectl -n flux-system logs deploy/helm-controller
+        kubectl -n flux-system logs deploy/image-reflector-controller
+        kubectl -n flux-system logs deploy/image-automation-controller
         flux get all --all-namespaces

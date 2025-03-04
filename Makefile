@@ -38,7 +38,7 @@ push: ## Push the Kubernetes manifests to Github Container Registry.
 
 ##@ Flux
 
-bootstrap: ## Deploy Flux Operator on the Kubernetes cluster.
+bootstrap-staging: ## Deploy Flux Operator on the staging Kubernetes cluster.
 	@test $${GITHUB_TOKEN?Environment variable not set}
 
 	helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
@@ -56,3 +56,24 @@ bootstrap: ## Deploy Flux Operator on the Kubernetes cluster.
 
 	kubectl -n flux-system wait fluxinstance/flux --for=condition=Ready --timeout=5m
 
+bootstrap-update: ## Deploy Flux Operator on the image update automation Kubernetes cluster.
+	@test $${GITHUB_TOKEN?Environment variable not set}
+
+	helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
+	  --namespace flux-system \
+	  --create-namespace \
+	  --set multitenancy.enabled=true \
+	  --wait
+
+	kubectl -n flux-system create secret docker-registry ghcr-auth \
+	  --docker-server=ghcr.io \
+	  --docker-username=flux \
+	  --docker-password=$$GITHUB_TOKEN
+
+	kubectl -n flux-system create secret generic github-auth \
+	  --from-literal=username=flux \
+	  --from-literal=password=$$GITHUB_TOKEN
+
+	kubectl apply -f clusters/update/flux-system/flux-instance.yaml
+
+	kubectl -n flux-system wait fluxinstance/flux --for=condition=Ready --timeout=5m
