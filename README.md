@@ -24,6 +24,8 @@ and **cluster admin** rights to all clusters in the fleet to be able to perform 
 - Configure the delivery of platform components (defined in [d2-infra repository](https://github.com/controlplaneio-fluxcd/d2-infra)).
 - Configure the delivery of applications (defined in [d2-apps repository](https://github.com/controlplaneio-fluxcd/d2-apps)).
 
+## OCI Artifacts
+
 The content of this repository is packaged as an OCI Artifact, signed and published to GitHub Container Registry
 using the [push-artifact](https://github.com/controlplaneio-fluxcd/d2-fleet/blob/main/.github/workflows/push-artifact.yaml)
 GitHub Actions workflow.
@@ -36,3 +38,10 @@ The infrastructure components from `d2-infra` and the applications from `d2-apps
 and are packaged as OCI Artifacts. The delivery of these components is performed by the Flux Operator
 using the [ResourceSet](https://github.com/controlplaneio-fluxcd/d2-fleet/tree/main/tenants) definitions.
 
+
+| Artifact                                                    | Git Repository | Envs                                                       |
+|-------------------------------------------------------------|----------------|------------------------------------------------------------|
+| `oci://ghcr.io/controlplaneio-fluxcd/d2-fleet`              | d2-fleet       | staging / production / GHA image update automation cluster |
+| `oci://ghcr.io/controlplaneio-fluxcd/d2-infra/cert-manager` | d2-infra       | staging / production                                       |
+| `oci://ghcr.io/controlplaneio-fluxcd/d2-apps/backend`       | d2-apps        | staging / production                                       |
+| `oci://ghcr.io/controlplaneio-fluxcd/d2-apps/frontend`      | d2-apps        | staging / production                                       |
