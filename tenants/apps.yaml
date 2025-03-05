@@ -25,6 +25,8 @@ spec:
       kind: Namespace
       metadata:
         name: << inputs.tenant >>
+        labels:
+          toolkit.fluxcd.io/role: "tenant"
     - apiVersion: v1
       kind: ConfigMap
       metadata:
