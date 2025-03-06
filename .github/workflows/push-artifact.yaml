@@ -5,6 +5,8 @@ on:
   push:
     branches:
       - 'main'
+    tags:
+      - '*'
 
 jobs:
   flux-push:
@@ -26,13 +28,25 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Prepare tags
+        id: prep
+        run: |
+          TAG=latest
+          VERSION="${{ github.ref_name }}-${GITHUB_SHA::8}"
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            TAG=production
+            VERSION="${{ github.ref_name }}"
+          fi
+          echo "tag=${TAG}" >> $GITHUB_OUTPUT
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
       - name: Push artifact
         uses: controlplaneio-fluxcd/distribution/actions/push@main
         id: push
         with:
           repository: ghcr.io/${{ github.repository }}
           path: "./"
-          diff-tag: latest
+          diff-tag: ${{ steps.prep.outputs.tag }}
+          tags: ${{ steps.prep.outputs.version }}
       - name: Sign artifact
         if: steps.push.outputs.pushed == 'true'
         run: cosign sign --yes $DIGEST_URL
