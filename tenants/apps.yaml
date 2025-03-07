@@ -17,9 +17,13 @@ spec:
     - tenant: "frontend"
       tag: "${ARTIFACT_TAG}"
       environment: "${ENVIRONMENT}"
+      artifactSubjectWorkflow: "${ARTIFACT_SUBJECT_WORKFLOW}"
+      artifactSubjectGitRef: "${ARTIFACT_SUBJECT_GIT_REF}"
     - tenant: "backend"
       tag: "${ARTIFACT_TAG}"
       environment: "${ENVIRONMENT}"
+      artifactSubjectWorkflow: "${ARTIFACT_SUBJECT_WORKFLOW}"
+      artifactSubjectGitRef: "${ARTIFACT_SUBJECT_GIT_REF}"
   resources:
     - apiVersion: v1
       kind: Namespace
@@ -72,6 +76,11 @@ spec:
         url: "oci://ghcr.io/controlplaneio-fluxcd/d2-apps/<< inputs.tenant >>"
         ref:
           tag: << inputs.tag >>
+        verify:
+          provider: cosign
+          matchOIDCIdentity:
+          - issuer: ^https://token\.actions\.githubusercontent\.com$
+            subject: ^https://github\.com/controlplaneio-fluxcd/d2-apps/\.github/workflows/<< inputs.artifactSubjectWorkflow >>\.yaml@<< inputs.artifactSubjectGitRef >>$
     - apiVersion: kustomize.toolkit.fluxcd.io/v1
       kind: Kustomization
       metadata:
