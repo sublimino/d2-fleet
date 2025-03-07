@@ -13,4 +13,4 @@ data:
   CLUSTER_NAME: prod-eu-1
   CLUSTER_DOMAIN: prodeu1.example.com
   ARTIFACT_SUBJECT_WORKFLOW: release-artifact
-  ARTIFACT_SUBJECT_GIT_REF: refs/tags/v\d+\.\d+\.\d+
+  ARTIFACT_SUBJECT_GIT_REF: refs/tags/.*
