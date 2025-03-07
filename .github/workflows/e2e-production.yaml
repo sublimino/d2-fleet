@@ -25,7 +25,6 @@ jobs:
       run: |
         resources=(
           ResourceSet/flux-system/infra
-          Kustomization/cert-manager/infra-configs
           ResourceSet/flux-system/apps
           Kustomization/backend/apps
           Kustomization/frontend/apps
