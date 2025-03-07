@@ -34,7 +34,7 @@ jobs:
           TAG=latest
           VERSION="${{ github.ref_name }}-${GITHUB_SHA::8}"
           if [[ $GITHUB_REF == refs/tags/* ]]; then
-            TAG=production
+            TAG=latest-stable
             VERSION="${{ github.ref_name }}"
           fi
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
