@@ -48,3 +48,11 @@ spec:
               matchOIDCIdentity:
               - issuer: ^https://token\.actions\.githubusercontent\.com$
                 subject: ^https://github\.com/controlplaneio-fluxcd/d2-fleet/\.github/workflows/push-artifact\.yaml@refs/heads/main$
+      # Test release candidate image
+      - target:
+          kind: Deployment
+          name: kustomize-controller
+        patch: |
+          - op: replace
+            path: /spec/template/spec/containers/0/image
+            value: ghcr.io/fluxcd/kustomize-controller:rc-975a70d7
