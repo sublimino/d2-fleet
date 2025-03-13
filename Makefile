@@ -75,7 +75,8 @@ bootstrap-production: ## Deploy Flux Operator on the production Kubernetes clust
 	kubectl -n flux-system wait fluxinstance/flux --for=condition=Ready --timeout=5m
 
 bootstrap-update: ## Deploy Flux Operator on the image update automation Kubernetes cluster.
-	@test $${GITHUB_TOKEN?Environment variable not set}
+	@test $${GITHUB_TOKEN?Environment variable not set for GHCR}
+	@test $${GH_UPDATE_TOKEN?Environment variable not set for GitHub repos}
 
 	helm install flux-operator oci://ghcr.io/controlplaneio-fluxcd/charts/flux-operator \
 	  --namespace flux-system \
@@ -90,7 +91,7 @@ bootstrap-update: ## Deploy Flux Operator on the image update automation Kuberne
 
 	kubectl -n flux-system create secret generic github-auth \
 	  --from-literal=username=flux \
-	  --from-literal=password=$$GITHUB_TOKEN
+	  --from-literal=password=$$GH_UPDATE_TOKEN
 
 	kubectl apply -f clusters/update/flux-system/flux-instance.yaml
 
