@@ -18,7 +18,8 @@ jobs:
       uses: helm/kind-action@main
     - name: Bootstrap Flux
       env:
-        GITHUB_TOKEN: ${{ secrets.GH_UPDATE_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}       # for GHCR access
+        GH_UPDATE_TOKEN: ${{ secrets.GH_UPDATE_TOKEN }} # for GitHub repos write access
       run: |
         make bootstrap-update
     - name: Run image automation
