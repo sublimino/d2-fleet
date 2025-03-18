@@ -24,6 +24,7 @@ jobs:
     - name: Verify cluster reconciliation
       run: |
         resources=(
+          Kustomization/flux-system/flux-system
           ResourceSet/flux-system/infra
           ResourceSet/flux-system/apps
           Kustomization/backend/apps
