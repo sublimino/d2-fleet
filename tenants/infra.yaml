@@ -84,6 +84,7 @@ spec:
         name: infra-controllers
         namespace: << inputs.tenant >>
       spec:
+        targetNamespace: << inputs.tenant >>
         serviceAccountName: flux
         interval: 30m
         retryInterval: 5m
@@ -106,6 +107,7 @@ spec:
       spec:
         dependsOn:
           - name: infra-controllers
+        targetNamespace: << inputs.tenant >>
         serviceAccountName: flux
         interval: 30m
         retryInterval: 5m
