@@ -43,6 +43,7 @@ spec:
         namespace: << inputs.tenant >>
         annotations:
           fluxcd.controlplane.io/copyFrom: "flux-system/ghcr-auth"
+        type: kubernetes.io/dockerconfigjson
     - apiVersion: v1
       kind: ServiceAccount
       metadata:
