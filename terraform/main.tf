@@ -4,11 +4,11 @@ terraform {
   required_providers {
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = ">= 2.27"
+      version = ">= 2.37"
     }
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 2.12"
+      version = ">= 3.0"
     }
   }
 }
@@ -39,7 +39,7 @@ resource "kubernetes_secret" "git_auth" {
         "ghcr.io" : {
           username = "flux"
           password = var.oci_token
-          auth     = base64encode(join(":", ["flux", var.oci_token]))
+          auth = base64encode(join(":", ["flux", var.oci_token]))
         }
       }
     })
@@ -70,46 +70,46 @@ resource "helm_release" "flux_instance" {
   name       = "flux"
   namespace  = "flux-system"
   repository = "oci://ghcr.io/controlplaneio-fluxcd/charts"
-  chart      = "flux-instance"
+  chart = "flux-instance"
 
   // Configure the Flux components and kustomize patches.
   values = [
     file("values/instance.yaml")
   ]
 
-  // Configure the Flux distribution.
-  set {
-    name  = "instance.distribution.version"
-    value = var.flux_version
-  }
-  set {
-    name  = "instance.distribution.registry"
-    value = var.flux_registry
-  }
-  set {
-    name  = "instance.distribution.artifact"
-    value = "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests:latest"
-  }
-
-  // Configure Flux sync from GitHub Container Registry.
-  set {
-    name  = "instance.sync.kind"
-    value = "OCIRepository"
-  }
-  set {
-    name  = "instance.sync.url"
-    value = var.oci_url
-  }
-  set {
-    name  = "instance.sync.path"
-    value = var.oci_path
-  }
-  set {
-    name  = "instance.sync.ref"
-    value = var.oci_tag
-  }
-  set {
-    name  = "instance.sync.pullSecret"
-    value = "ghcr-auth"
-  }
+  // Configure the Flux distribution and sync from GitHub Container Registry.
+  set = [
+    {
+      name  = "instance.distribution.version"
+      value = var.flux_version
+    },
+    {
+      name  = "instance.distribution.registry"
+      value = var.flux_registry
+    },
+    {
+      name  = "instance.distribution.artifact"
+      value = "oci://ghcr.io/controlplaneio-fluxcd/flux-operator-manifests:latest"
+    },
+    {
+      name  = "instance.sync.kind"
+      value = "OCIRepository"
+    },
+    {
+      name  = "instance.sync.url"
+      value = var.oci_url
+    },
+    {
+      name  = "instance.sync.path"
+      value = var.oci_path
+    },
+    {
+      name  = "instance.sync.ref"
+      value = var.oci_tag
+    },
+    {
+      name  = "instance.sync.pullSecret"
+      value = "ghcr-auth"
+    },
+  ]
 }
