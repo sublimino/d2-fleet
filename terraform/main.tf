@@ -111,5 +111,10 @@ resource "helm_release" "flux_instance" {
       name  = "instance.sync.pullSecret"
       value = "ghcr-auth"
     },
+    {
+      name  = "healthcheck.enabled"
+      value = "true"
+      type  = "auto"
+    },
   ]
 }
