@@ -5,6 +5,7 @@ metadata:
   namespace: flux-system
   labels:
     toolkit.fluxcd.io/runtime: "true"
+    reconcile.fluxcd.io/watch: Enabled
   annotations:
     kustomize.toolkit.fluxcd.io/ssa: "Merge"
 data:

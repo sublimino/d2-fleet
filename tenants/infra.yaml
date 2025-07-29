@@ -36,6 +36,8 @@ spec:
         namespace: << inputs.tenant >>
         annotations:
           fluxcd.controlplane.io/copyFrom: "flux-system/flux-runtime-info"
+        labels:
+          reconcile.fluxcd.io/watch: Enabled
     - apiVersion: v1
       kind: Secret
       metadata:
