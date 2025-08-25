@@ -17,7 +17,9 @@ spec:
       data:
         sources: >-
           https://github.com/controlplaneio-fluxcd/
+          https://github.com/sublimino/
           oci://ghcr.io/controlplaneio-fluxcd/
+          oci://ghcr.io/sublimino/
           oci://ghcr.io/stefanprodan/charts/
           oci://registry-1.docker.io/bitnamicharts/
     - apiVersion: admissionregistration.k8s.io/v1
