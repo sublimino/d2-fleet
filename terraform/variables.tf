@@ -8,7 +8,7 @@ variable "oci_token" {
 variable "oci_url" {
   description = "OCI repository URL"
   type        = string
-  default = "oci://ghcr.io/controlplaneio-fluxcd/d2-fleet"
+  default = "oci://ghcr.io/sublimino/d2-fleet"
 }
 
 variable "oci_path" {
