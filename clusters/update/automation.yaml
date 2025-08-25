@@ -12,7 +12,7 @@ spec:
       name: imageupdateautomations.image.toolkit.fluxcd.io
   inputs:
     - namespace: "apps"
-      repository: "https://github.com/controlplaneio-fluxcd/d2-apps.git"
+      repository: "https://github.com/sublimino/d2-apps.git"
       pushBranch: "image-updates"
     - namespace: "infra"
       repository: "https://github.com/controlplaneio-fluxcd/d2-infra.git"

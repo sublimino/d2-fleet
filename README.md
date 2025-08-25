@@ -7,7 +7,7 @@
 > The `d2` reference architecture comprised of
 > [d2-fleet](https://github.com/sublimino/d2-fleet),
 > [d2-infra](https://github.com/controlplaneio-fluxcd/d2-infra) and
-> [d2-apps](https://github.com/controlplaneio-fluxcd/d2-apps)
+> [d2-apps](https://github.com/sublimino/d2-apps)
 > is a set of best practices and production-ready examples for using Flux Operator
 > and OCI Artifacts to manage the continuous delivery of Kubernetes infrastructure and
 > applications on multi-cluster multi-tenant environments.
@@ -24,7 +24,7 @@ and **cluster admin** rights to all clusters in the fleet to be able to perform 
 
 - Bootstrap Flux Operator with multi-tenancy restrictions on the fleet of clusters.
 - Configure the delivery of platform components (defined in [d2-infra repository](https://github.com/controlplaneio-fluxcd/d2-infra)).
-- Configure the delivery of applications (defined in [d2-apps repository](https://github.com/controlplaneio-fluxcd/d2-apps)).
+- Configure the delivery of applications (defined in [d2-apps repository](https://github.com/sublimino/d2-apps)).
 
 ## OCI Artifacts
 
@@ -58,7 +58,7 @@ and are packaged as OCI Artifacts. The delivery of these components is performed
 using the [ResourceSet](https://github.com/sublimino/d2-fleet/tree/main/tenants) definitions.
 
 Each component is published to a dedicated OCI repository, for example, the `frontend` component
-is published to `oci://ghcr.io/controlplaneio-fluxcd/d2-apps/frontend` and is tagged as:
+is published to `oci://ghcr.io/sublimino/d2-apps/frontend` and is tagged as:
 
 - `latest` for the main branch commits that modify the component.
 - `vX.Y.Z` for the release tags matching the Git tag format `<component>/vX.Y.Z`.
@@ -85,7 +85,7 @@ as `latest` to be deployed on the staging clusters, and the ones tagged as
 `latest-stable` to be deployed in production.
 
 Rolling back a component in production can be done by moving its `latest-stable` tag to a previous version,
-for example, `flux tag oci://ghcr.io/controlplaneio-fluxcd/d2-apps/frontend:v1.2.3 --tag latest-stable`.
+for example, `flux tag oci://ghcr.io/sublimino/d2-apps/frontend:v1.2.3 --tag latest-stable`.
 
 The semver tags are considered immutable, while the `latest-stable` tag act as a pointer to the
 latest release of the component.
